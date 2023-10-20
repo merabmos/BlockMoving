@@ -552,7 +552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7aa57dff012978f498214c01935a4bfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blockCharacter: {fileID: 5654292374586450603, guid: 43475a407bbd20947bda9efb24f7d8a7, type: 3}
+  blockCharacter: {fileID: 8266166126903157524, guid: 43475a407bbd20947bda9efb24f7d8a7, type: 3}
 --- !u!4 &2074145476
 Transform:
   m_ObjectHideFlags: 0

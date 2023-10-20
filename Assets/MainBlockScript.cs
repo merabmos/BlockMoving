@@ -1,3 +1,4 @@
+using Assets.Services;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -12,12 +13,14 @@ public class MainBlockScript : MonoBehaviour
     [SerializeField] private float flapStrength;
     [SerializeField] private float speed;
 
+    private SavingSpawnedObjects savingSpawnedObjects;
     private bool grounded = false;
     private bool fixedBlock = false;
-    
+
     // Start is called before the first frame update
     void Start()
     {
+        savingSpawnedObjects = new SavingSpawnedObjects();
     }
 
     // Update is called once per frame
@@ -37,8 +40,8 @@ public class MainBlockScript : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                fixedBlock = true;
-                Destroy(blockRigidBody);
+                SetFixed(true);
+                ChangeRigidBodyConstraints(RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation);
             }
         }
     }
@@ -46,17 +49,39 @@ public class MainBlockScript : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag != "Wall")
-            grounded = true;
+            SetGrounded(true);
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.tag != "Wall")
-            grounded = false;
+            SetGrounded(false);
     }
 
     private void OnMouseDown()
     {
-        Destroy(gameObject);
+        savingSpawnedObjects.RemoveAliveBlock(this);
+
+        Destroy(this.gameObject);
     }
+
+    public MainBlockScript SetFixed(bool isFixed)
+    {
+        fixedBlock = isFixed;
+        return this;
+
+    }
+
+    public MainBlockScript SetGrounded(bool isGrounded)
+    {
+        grounded = isGrounded;
+        return this;
+    }
+
+    public MainBlockScript ChangeRigidBodyConstraints(RigidbodyConstraints2D constraints2D)
+    {
+        blockRigidBody.constraints = constraints2D;
+        return this;
+    }
+
 }

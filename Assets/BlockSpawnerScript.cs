@@ -1,14 +1,17 @@
+using Assets.Services;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BlockSpawnerScript : MonoBehaviour
 {
-    public GameObject blockCharacter;
+    [SerializeField] private MainBlockScript blockCharacter;
+    private SavingSpawnedObjects savingSpawnedObjects;
     // Start is called before the first frame update
     void Start()
     {
-        SpawnBlock();
+        savingSpawnedObjects = new SavingSpawnedObjects();
+        SpawnBlockAndSave();
     }
 
     // Update is called once per frame
@@ -16,13 +19,15 @@ public class BlockSpawnerScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            SpawnBlock();
+            SpawnBlockAndSave();
         }
     }
 
-    private void SpawnBlock()
+    private void SpawnBlockAndSave()
     { 
-       Instantiate(blockCharacter);
+       MainBlockScript gameObj = Instantiate<MainBlockScript>(blockCharacter);
+       savingSpawnedObjects.AddAliveBlock(gameObj);
     }
 
+  
 } 
