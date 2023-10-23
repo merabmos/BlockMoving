@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8266166126903157524}
   m_Layer: 0
   m_Name: BlockCharacter
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -173,5 +173,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockRigidBody: {fileID: 2961948583742058834}
   spriteRenderer: {fileID: 6255113486929197403}
+  boxCollider2D: {fileID: 3228178747202148206}
   flapStrength: 5
   speed: 5
