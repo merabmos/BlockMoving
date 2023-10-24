@@ -17,19 +17,20 @@ public class MainBlockScript : MonoBehaviour
     [SerializeField] private float flapStrength;
     [SerializeField] private float speed;
 
-    private SavingSpawnedObjects savingSpawnedObjects;
-    private bool grounded = false;
-    private bool fixedBlock = false;
+    private SavingSpawnedObjectsService _savingSpawnedObjects;
+    private bool _grounded = false;
+    private bool _fixedBlock = false;
     // Start is called before the fwdirst frame update
     void Start()
     {
-        savingSpawnedObjects = new SavingSpawnedObjects();
+        _savingSpawnedObjects = new SavingSpawnedObjectsService();
     }
+
 
     // Update is called once per frame
     void Update()
     {
-        if (!fixedBlock)
+        if (!_fixedBlock)
         {
             if (Input.GetKey(KeyCode.D))
                 transform.position += (Vector3.right * speed) * Time.deltaTime;
@@ -37,7 +38,7 @@ public class MainBlockScript : MonoBehaviour
             if (Input.GetKey(KeyCode.A))
                 transform.position += (Vector3.left * speed) * Time.deltaTime;
 
-            if (Input.GetKeyDown(KeyCode.W) && grounded)
+            if (Input.GetKeyDown(KeyCode.W) && _grounded)
                 blockRigidBody.velocity = Vector2.up * flapStrength;
 
             if (Input.GetKeyDown(KeyCode.Space))
@@ -54,33 +55,39 @@ public class MainBlockScript : MonoBehaviour
             SetGrounded(true);
     }
 
+
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (!collision.gameObject.ObjectHasTag("Wall") /*&& !collision.gameObject.ObjectHasTag("Player")*/)
             SetGrounded(false);
     }
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (!collision.gameObject.ObjectHasTag("Wall") && !_grounded /*&& !collision.gameObject.ObjectHasTag("Player")*/)
+            SetGrounded(true);
+    }
 
     private void OnMouseDown()
     {
-        savingSpawnedObjects.RemoveAliveBlock(this);
+        _savingSpawnedObjects.RemoveAliveBlock(this);
     }
 
     public MainBlockScript SetFixed(bool isFixed)
     {
-        fixedBlock = isFixed;
+        _fixedBlock = isFixed;
         return this;
 
     }
 
     public MainBlockScript SetGrounded(bool isGrounded)
     {
-        grounded = isGrounded;
+        _grounded = isGrounded;
         return this;
     }
 
-    public Tuple<float,float> GetSizeXandY()
+    public BlockSize GetBlockSize()
     {
-        return Tuple.Create<float,float>(boxCollider2D.size.x,boxCollider2D.size.y);
+        return new BlockSize(boxCollider2D);
     }
 
     public MainBlockScript ChangeRigidBodyConstraints(RigidbodyConstraints2D constraints2D)

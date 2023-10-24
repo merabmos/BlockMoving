@@ -7,14 +7,14 @@ using UnityEngine;
 
 namespace Assets.Scripts.Models
 {
-    public class SceneSize
+    public  class SceneSize
     {
-        public float sceneMinX { get; set; }
-        public float sceneMaxX { get; set; }
-        public float sceneMinY { get; set; }
-        public float sceneMaxY { get; set; }
+        public static readonly float sceneMinX;
+        public static readonly float sceneMaxX;
+        public static readonly float sceneMinY;
+        public static readonly float sceneMaxY;
 
-        public SceneSize()
+        static SceneSize()
         {
             float cameraSize = Camera.main.orthographicSize;
             float cameraAspect = Camera.main.aspect;
@@ -24,5 +24,11 @@ namespace Assets.Scripts.Models
             sceneMinY = Camera.main.transform.position.y - cameraSize;
             sceneMaxY = Camera.main.transform.position.y + cameraSize;
         }
+
+        public float GetSceneMinX() { return sceneMinX; }
+        public float GetSceneMaxX() { return sceneMaxX; }
+        public float GetSceneMinY() {  return sceneMinY; }
+        public float GetSceneMaxY() {  return sceneMaxY; }  
+
     }
 }

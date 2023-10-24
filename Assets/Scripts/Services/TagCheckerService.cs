@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Services
 {
-    public static class TagChecker
+    public static class TagCheckerService
     {
         public static bool ObjectHasTag(this GameObject gameObject ,string tag)
         {

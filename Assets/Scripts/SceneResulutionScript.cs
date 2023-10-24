@@ -1,4 +1,5 @@
 using Assets.Scripts.Models;
+using Assets.Scripts.Services;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,14 +18,15 @@ public class SceneResulutionScript : MonoBehaviour
     }
     void SetWallColliders()
     {
-        SceneSize size = new SceneSize();
+        ObjectsPositionsService getObjectsPositions = new ObjectsPositionsService();
 
-        rightWall.transform.position = new Vector3(size.sceneMaxX + (rightWall.size.x / 2), 0);
-        leftWall.transform.position = new Vector3(size.sceneMinX - (leftWall.size.x / 2), 0);
-        topWall.transform.position = new Vector3(0, size.sceneMaxY + (topWall.size.y / 2));
-        bottomWall.transform.position = new Vector3(0, size.sceneMinY - (bottomWall.size.y / 2));
+        rightWall.transform.position = getObjectsPositions.GetRightWallPositionByScene(rightWall);
+        leftWall.transform.position = getObjectsPositions.GetLeftWallPositionByScene(leftWall);
+        topWall.transform.position = getObjectsPositions.GetTopWallPositionByScene(topWall);
+        bottomWall.transform.position = getObjectsPositions.GetBottomWallPositionByScene(bottomWall);
 
-        topWall.size = new Vector3(size.sceneMaxX - size.sceneMinX, topWall.size.y);
-        bottomWall.size = new Vector3(size.sceneMaxX - size.sceneMinX, bottomWall.size.y);
+        ObjectsSizesService getObjectsSizes= new ObjectsSizesService();
+        topWall.size = getObjectsSizes.GetHorizontalWallSizeByScene(topWall);
+        bottomWall.size = getObjectsSizes.GetHorizontalWallSizeByScene(bottomWall);
     }
 }

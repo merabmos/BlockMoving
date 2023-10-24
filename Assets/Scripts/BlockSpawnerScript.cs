@@ -1,4 +1,5 @@
 using Assets.Scripts.Models;
+using Assets.Scripts.Services;
 using Assets.Services;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,27 +10,28 @@ public class BlockSpawnerScript : MonoBehaviour
     [SerializeField] private int countOfInsantiatingObjects;
     [SerializeField] private MainBlockScript blockCharacter;
 
+    #region Private Properties
     private int AddableBlocksMaxCount;
-    private SavingSpawnedObjects savingSpawnedObjects;
-    private SceneSize sceneSize;
-
-    // Start is called before the first frame update
+    private SavingSpawnedObjectsService _savingSpawnedObjects;
+    private ObjectsPositionsService _objectsPositions;
+    #endregion
     void Start()
     {
-        savingSpawnedObjects = new SavingSpawnedObjects();
-        sceneSize = new SceneSize();
+        #region Initialize
+        _savingSpawnedObjects = new SavingSpawnedObjectsService();
+        _objectsPositions = new ObjectsPositionsService();
         AddableBlocksMaxCount = countOfInsantiatingObjects;
+        #endregion
 
         SpawnBlockAndSave();
-        savingSpawnedObjects.EnablingBlock();
-    }
 
-    // Update is called once per frame
+        _savingSpawnedObjects.EnablingBlock();
+    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            var enabledCount = savingSpawnedObjects.EnablingBlock();
+            var enabledCount = _savingSpawnedObjects.EnablingBlock();
             if (enabledCount == countOfInsantiatingObjects)
             {
                 countOfInsantiatingObjects += AddableBlocksMaxCount;
@@ -37,20 +39,15 @@ public class BlockSpawnerScript : MonoBehaviour
             }
         }
     }
-
     private void SpawnBlockAndSave()
     {
         for (int i = 0; i < AddableBlocksMaxCount; i++)
         {
-            var getBlockSizesTuple = blockCharacter.GetSizeXandY();
             MainBlockScript gameObj = Instantiate(blockCharacter,
-                new Vector3(sceneSize.sceneMinX + (getBlockSizesTuple.Item1 / 2),
-                sceneSize.sceneMinY + (getBlockSizesTuple.Item2 / 2), 0), transform.rotation);
+                _objectsPositions.GetBlockSpawningPositionByScene(blockCharacter.GetBlockSize()), transform.rotation);
 
             gameObj.gameObject.SetActive(false);
-            savingSpawnedObjects.AddAliveBlock(gameObj);
+            _savingSpawnedObjects.AddAliveBlock(gameObj);
         }
     }
-
-
 }
